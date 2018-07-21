@@ -1,6 +1,6 @@
 import Dependencies._
 
-lazy val root = (project in file(".")).
+lazy val virtualMachine = (project in file(".")).
   settings(
     inThisBuild(List(
       organization := "com.nihirash",

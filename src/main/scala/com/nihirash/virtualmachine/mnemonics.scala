@@ -56,7 +56,7 @@ case object Store extends Mnemonic {
     val varName = Mnemonic.getByte(state)
     val (tempState, value) = Mnemonic.pop(state)
     val newVars = state.vars + (varName -> value)
-    state.copy(pc = state.pc + 2, vars = newVars)
+    tempState.copy(pc = state.pc + 2, vars = newVars)
   }
 }
 
@@ -94,8 +94,8 @@ case object Sub extends Mnemonic {
 
 case object LT extends Mnemonic {
   override def eval(state: State): State = {
-    val (tempState, a) = Mnemonic.pop(state)
-    val (tempState2, b) = Mnemonic.pop(tempState)
+    val (tempState, b) = Mnemonic.pop(state)
+    val (tempState2, a) = Mnemonic.pop(tempState)
     val value: Byte = if (a < b) 1 else 0
 
     state.copy(pc = state.pc + 1, stack = value :: state.stack)
@@ -135,8 +135,8 @@ case object Jump extends Mnemonic {
 
 case object Eq extends Mnemonic {
   override def eval(state: State): State = {
-    val (tempState, a) = Mnemonic.pop(state)
-    val (tempState2, b) = Mnemonic.pop(tempState)
+    val (tempState, b) = Mnemonic.pop(state)
+    val (tempState2, a) = Mnemonic.pop(tempState)
     val value: Byte = if (a == b) 1 else 0
 
     state.copy(pc = state.pc + 1, stack = value :: state.stack)
@@ -147,7 +147,7 @@ case object PutNum extends Mnemonic {
   override def eval(state: State): State = {
     val (newState, byte) = Mnemonic.pop(state)
     printf("%d", byte)
-    state.copy(pc = state.pc + 1)
+    newState.copy(pc = state.pc + 1)
   }
 }
 
@@ -155,7 +155,7 @@ case object PutC extends Mnemonic {
   override def eval(state: State): State = {
     val (newState, byte) = Mnemonic.pop(state)
     printf("%c", byte)
-    state.copy(pc = state.pc + 1)
+    newState.copy(pc = state.pc + 1)
   }
 }
 

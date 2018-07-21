@@ -28,9 +28,9 @@ class MnemonicsSpec extends FreeSpec with Matchers  {
 
   "Store" - {
     "will save to variable stack's top value" in {
-      val state = State(stack = List[Byte](0x1, 0x2, 0x3), memory = Array[Byte](0x2, 'a', 0x0))
+      val state = State(stack = List[Byte](0x2, 0x3), memory = Array[Byte](0x2, 'a', 0x0))
       assert(
-        state.copy(vars = Map('a'.toByte -> 0x1.toByte), pc = state.pc + 2) == Store.eval(state)
+        state.copy(vars = Map('a'.toByte -> 0x2.toByte), stack = List[Byte](0x3), pc = state.pc + 2) == Store.eval(state)
       )
     }
 
@@ -114,24 +114,24 @@ class MnemonicsSpec extends FreeSpec with Matchers  {
   }
 
   "LT" - {
-    "will store in stack 1 if first element of stack smaller than second" in {
-      val state = State(memory = Array[Byte](0x7, 0x0), stack = List[Byte](0x1, 0x2))
+    "will store in stack 1 if second element of stack smaller than first" in {
+      val state = State(memory = Array[Byte](0x7, 0x0), stack = List[Byte](0x2, 0x1))
       assert(
-        state.copy(pc = state.pc + 1, stack = List[Byte](0x1, 0x1, 0x2)) == LT.eval(state)
+        state.copy(pc = state.pc + 1, stack = List[Byte](0x1, 0x2, 0x1)) == LT.eval(state)
       )
     }
 
-    "will store in stack 0 if first element of stack is bigger than second" in {
-      val state = State(memory = Array[Byte](0x7, 0x0), stack = List[Byte](0x3, 0x2))
+    "will store in stack 0 if second element of stack is bigger than first" in {
+      val state = State(memory = Array[Byte](0x7, 0x0), stack = List[Byte](0x2, 0x3))
       assert(
-        state.copy(pc = state.pc + 1, stack = List[Byte](0x0, 0x3, 0x2)) == LT.eval(state)
+        state.copy(pc = state.pc + 1, stack = List[Byte](0x0, 0x2, 0x3)) == LT.eval(state)
       )
     }
 
-    "will store 0 in stack if stack contains one element" in {
+    "will store 1 in stack if stack contains one element" in {
       val state = State(memory = Array[Byte](0x7, 0x0), stack = List[Byte](0x2))
       assert(
-        state.copy(pc = state.pc + 1, stack = List[Byte](0x0, 0x2)) == LT.eval(state)
+        state.copy(pc = state.pc + 1, stack = List[Byte](0x1, 0x2)) == LT.eval(state)
       )
     }
   }
